@@ -1,0 +1,129 @@
+/* 
+   University Computer Graphics Project
+   Style Sheet for Flappy Bird Game
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #2c3e50;
+    overflow: hidden;
+    /* stop scrolling */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Title at the top center */
+#title-container {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    z-index: 5;
+    pointer-events: none;
+}
+
+#main-title {
+    color: white;
+    font-size: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 5px;
+}
+
+/* Score display during gameplay */
+#score-container {
+    position: absolute;
+    top: 80px;
+    width: 100%;
+    text-align: center;
+    z-index: 5;
+    pointer-events: none;
+}
+
+#score-text {
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+    text-shadow: 3px 3px 0px #000;
+}
+
+/* Canvas takes up everything */
+canvas {
+    display: block;
+    background: #70c5ce;
+    /* sky blue color */
+}
+
+/* UI Overlay container */
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+/* Glassmorphism panel for start/game over */
+.panel {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    min-width: 300px;
+}
+
+.panel h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+.panel p {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* Simple button style */
+button {
+    background-color: #f1c40f;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #f39c12;
+}
+
+/* classes for hiding elements */
+.hidden {
+    display: none !important;
+}
+
+/* Adding a bit of responsive design just in case */
+@media (max-width: 600px) {
+    #main-title {
+        font-size: 28px;
+    }
+
+    .panel {
+        padding: 20px;
+        width: 90%;
+    }
+}

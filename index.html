@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Computer Graphics Project - Flappy Bird</title>
+    <!-- Linking my css file here -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Game title at the top -->
+    <div id="title-container">
+        <h1 id="main-title">FLAPPY BIRD</h1>
+    </div>
+
+    <!-- The score that shows while playing -->
+    <div id="score-container">
+        <span id="score-text">0</span>
+    </div>
+
+    <!-- Canvas where everything is drawn -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- UI Overlay for Start and Game Over -->
+    <div id="ui-overlay">
+        <!-- Start screen stuff -->
+        <div id="start-screen" class="panel">
+            <h2>Welcome!</h2>
+            <p>Press <b>SPACE</b> or <b>CLICK</b> to fly</p>
+            <p>Avoid the pipes and don't hit the ground!</p>
+            <button id="start-btn">START GAME</button>
+        </div>
+
+        <!-- Game over screen stuff -->
+        <div id="game-over-screen" class="panel hidden">
+            <h2>GAME OVER!</h2>
+            <p>Your Score: <span id="final-score">0</span></p>
+            <p>Best Score: <span id="best-score">0</span></p>
+            <button id="restart-btn">TRY AGAIN</button>
+        </div>
+    </div>
+
+    <!-- Script at the bottom so elements are loaded -->
+    <script src="script.js"></script>
+</body>
+</html>
