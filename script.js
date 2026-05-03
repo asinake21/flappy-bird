@@ -1,14 +1,5 @@
-/**
- * University of Technology - Computer Graphics Course (CG101)
- * Final Project: Interactive 2D Game
- * Student Name: [Student Name Placeholder]
- * Date: April 2026
- * 
- * DESCRIPTION:
- * This project is a 2D side-scrolling game using the HTML5 Canvas API.
- * It demonstrates core graphics concepts like rendering, physics, 
- * collision detection, and parallax scrolling.
- */
+// My Flappy Bird Game Project
+// Please read the README.md file for the full project description and details.
 
 // --- GLOBAL VARIABLES ---
 var canvas = document.getElementById('gameCanvas');
@@ -29,10 +20,10 @@ var score = 0;
 var highScore = localStorage.getItem('my_flappy_highscore') || 0;
 var frames = 0;
 
-// Physics settings (made these global so they are easy to change)
-// GRAVITY: CG CONCEPT - Applying a constant acceleration downwards
-let gravity_force = 0.16; // reduced gravity as requested
-let jump_power = -3.2; // reduced jump strength for better control
+// Physics settings
+// These variables control how fast the bird moves and falls
+let gravity_force = 0.10; // gravity pulling the bird down
+let jump_power = -3.0; // reduced jump strength for better control
 let scrollSpeed = 2.5;
 
 // Screen shake variables
@@ -62,19 +53,17 @@ var bird = {
     // update bird physics
     update: function () {
         if (gameState === 'START') {
-            // just hover up and down on start screen
-            // ANIMATION CONCEPT: Using Sine wave for periodic motion
+            // make the bird bounce up and down before the game starts
+            // I used Math.sin to make a smooth wave motion
             this.y = (canvas.height / 2) + Math.sin(frames * 0.1) * 15;
             return;
         }
 
-        // Apply gravity
-        // PHYSICS CONCEPT: velocity += acceleration
+        // apply gravity so the bird falls faster and faster
         this.velocity += gravity_force;
         this.y += this.velocity;
 
-        // BIRD ROTATION (CG CONCEPT: Transformation - Rotating based on velocity)
-        // this makes it look like it's diving down or jumping up
+        // rotate the bird so it points up when jumping and down when falling
         this.rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, this.velocity * 0.1));
 
         // collision with ground
@@ -94,7 +83,7 @@ var bird = {
     draw: function () {
         ctx.save(); // save the current state
 
-        // TRANSFORMATION: Move coordinate system to bird center
+        // move the canvas origin to the bird's position so we can rotate it easily
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
 
@@ -112,7 +101,7 @@ var bird = {
         ctx.save();
         ctx.translate(-5, 2);
         ctx.rotate(wingAngle);
-        ctx.fillStyle = "#fef9e7"; 
+        ctx.fillStyle = "#fef9e7";
         ctx.strokeStyle = "black";
         ctx.beginPath();
         ctx.moveTo(0, 0);
@@ -187,8 +176,8 @@ function update_pipes() {
     for (var i = pipes.length - 1; i >= 0; i--) {
         pipes[i].x -= scrollSpeed;
 
-        // COLLISION DETECTION: CG CONCEPT - AABB (Axis-Aligned Bounding Box)
-        // Note: I'm using a smaller hitbox for the bird to be "forgiving"
+        // checking if the bird hits the pipes
+        // I made the hitbox a bit smaller than the bird so the game isn't too hard
         let birdHitboxSize = 10; // smaller than radius (15)
 
         // check if bird is within pipe x range
@@ -234,8 +223,8 @@ function draw_pipes() {
     }
 }
 
-// BACKGROUND (PARALLAX)
-// CG CONCEPT: Parallax Scrolling - Layers moving at different speeds to show depth
+// Background arrays
+// Moving the background layers at different speeds to make it look 3D
 var clouds = [];
 var mountains = [];
 
@@ -258,7 +247,7 @@ function draw_parallax() {
         ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
         ctx.shadowBlur = 10;
         ctx.shadowColor = "rgba(255, 255, 255, 0.5)";
-        
+
         // DRAW FLUFFY CLOUD (Multiple overlapping circles)
         ctx.beginPath();
         ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
@@ -357,7 +346,7 @@ function end_game() {
 // INPUT HANDLING
 window.addEventListener('keydown', function (e) {
     if (e.code === 'Space' || e.code === 'Tab') {
-        e.preventDefault(); 
+        e.preventDefault();
         if (gameState === 'PLAYING') {
             bird.jump();
         } else if (gameState === 'START') {
@@ -390,7 +379,7 @@ startBtn.addEventListener('click', start_game);
 restartBtn.addEventListener('click', start_game);
 
 // --- MAIN LOOP ---
-// CG CONCEPT: Animation Loop - Using requestAnimationFrame to sync with monitor refresh rate
+// This function runs every frame to update and draw everything
 function main_loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
