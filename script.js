@@ -31,9 +31,9 @@ var frames = 0;
 
 // Physics settings (made these global so they are easy to change)
 // GRAVITY: CG CONCEPT - Applying a constant acceleration downwards
-let gravity_force = 0.16; // reduced gravity as requested
-let jump_power = -3.2; // reduced jump strength for better control
-let scrollSpeed = 2.5;
+let gravity_force = 0.22; // increased for better feel
+let jump_power = -4.2; // increased for better control
+let scrollSpeed = 3.0;
 
 // Screen shake variables
 var shake_timer = 0;
@@ -106,6 +106,21 @@ var bird = {
         ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
         ctx.stroke();
+
+        // --- THE WING (Restored) ---
+        let wingAngle = Math.sin(frames * 0.2) * 0.6;
+        ctx.save();
+        ctx.translate(-5, 2);
+        ctx.rotate(wingAngle);
+        ctx.fillStyle = "#fef9e7"; 
+        ctx.strokeStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(-this.radius, -this.radius, -this.radius * 1.2, 0);
+        ctx.quadraticCurveTo(-this.radius, this.radius * 0.5, 0, 0);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
 
         // draw eye
         ctx.fillStyle = "white";
@@ -238,13 +253,24 @@ init_parallax();
 
 function draw_parallax() {
     // draw clouds (slow)
-    ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
     clouds.forEach(c => {
+        ctx.save();
+        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "rgba(255, 255, 255, 0.5)";
+        
+        // DRAW FLUFFY CLOUD (Multiple overlapping circles)
         ctx.beginPath();
         ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+        ctx.arc(c.x + c.size * 0.5, c.y - c.size * 0.2, c.size * 0.7, 0, Math.PI * 2);
+        ctx.arc(c.x - c.size * 0.5, c.y - c.size * 0.2, c.size * 0.7, 0, Math.PI * 2);
+        ctx.arc(c.x + c.size * 0.8, c.y + c.size * 0.2, c.size * 0.5, 0, Math.PI * 2);
+        ctx.arc(c.x - c.size * 0.8, c.y + c.size * 0.2, c.size * 0.5, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
+
         if (gameState === 'PLAYING') c.x -= c.speed;
-        if (c.x + c.size < 0) c.x = canvas.width + c.size;
+        if (c.x + c.size * 2 < 0) c.x = canvas.width + c.size * 2;
     });
 
     // draw mountains (faster than clouds, slower than ground)
@@ -330,13 +356,14 @@ function end_game() {
 
 // INPUT HANDLING
 window.addEventListener('keydown', function (e) {
-    if (e.code === 'Space') {
+    // Basic space handling for original project feel
+    if (e.code === 'Space' || e.code === 'Tab') {
+        e.preventDefault(); // added this for Tab support as requested earlier
         if (gameState === 'PLAYING') {
             bird.jump();
         } else if (gameState === 'START') {
             start_game();
         } else if (gameState === 'OVER') {
-            // maybe wait a bit? not sure, let's just allow restart
             start_game();
         }
     }
@@ -345,8 +372,24 @@ window.addEventListener('keydown', function (e) {
 canvas.addEventListener('mousedown', function () {
     if (gameState === 'PLAYING') {
         bird.jump();
+    } else if (gameState === 'START') {
+        start_game();
+    } else if (gameState === 'OVER') {
+        start_game();
     }
 });
+
+// Touch support for responsiveness
+canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    if (gameState === 'PLAYING') {
+        bird.jump();
+    } else if (gameState === 'START') {
+        start_game();
+    } else if (gameState === 'OVER') {
+        start_game();
+    }
+}, { passive: false });
 
 startBtn.addEventListener('click', start_game);
 restartBtn.addEventListener('click', start_game);
