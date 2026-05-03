@@ -31,9 +31,9 @@ var frames = 0;
 
 // Physics settings (made these global so they are easy to change)
 // GRAVITY: CG CONCEPT - Applying a constant acceleration downwards
-let gravity_force = 0.22; // increased for better feel
-let jump_power = -4.2; // increased for better control
-let scrollSpeed = 3.0;
+let gravity_force = 0.16; // reduced gravity as requested
+let jump_power = -3.2; // reduced jump strength for better control
+let scrollSpeed = 2.5;
 
 // Screen shake variables
 var shake_timer = 0;
@@ -356,9 +356,8 @@ function end_game() {
 
 // INPUT HANDLING
 window.addEventListener('keydown', function (e) {
-    // Basic space handling for original project feel
     if (e.code === 'Space' || e.code === 'Tab') {
-        e.preventDefault(); // added this for Tab support as requested earlier
+        e.preventDefault(); 
         if (gameState === 'PLAYING') {
             bird.jump();
         } else if (gameState === 'START') {
@@ -369,19 +368,12 @@ window.addEventListener('keydown', function (e) {
     }
 });
 
-canvas.addEventListener('mousedown', function () {
-    if (gameState === 'PLAYING') {
-        bird.jump();
-    } else if (gameState === 'START') {
-        start_game();
-    } else if (gameState === 'OVER') {
-        start_game();
+// For Mouse and Touch support (responsive)
+function handle_input(e) {
+    if (e.type === 'touchstart') {
+        if (e.cancelable) e.preventDefault(); // crucial for mobile browsers to prevent double-firing
     }
-});
 
-// Touch support for responsiveness
-canvas.addEventListener('touchstart', function(e) {
-    e.preventDefault();
     if (gameState === 'PLAYING') {
         bird.jump();
     } else if (gameState === 'START') {
@@ -389,7 +381,10 @@ canvas.addEventListener('touchstart', function(e) {
     } else if (gameState === 'OVER') {
         start_game();
     }
-}, { passive: false });
+}
+
+canvas.addEventListener('mousedown', handle_input);
+canvas.addEventListener('touchstart', handle_input, { passive: false });
 
 startBtn.addEventListener('click', start_game);
 restartBtn.addEventListener('click', start_game);
